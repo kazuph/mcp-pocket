@@ -9,7 +9,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { getPocketList } from "./pocket.js";
+import { getPocketList, markAsRead } from "./pocket.js";
 
 interface ServerConfig {
 	pocket?: {
@@ -34,6 +34,10 @@ const GetPocketArticlesSchema = z.object({
 	count: z.number().optional().default(20),
 });
 
+const MarkAsReadSchema = z.object({
+	itemId: z.string(),
+});
+
 const ToolInputSchema = ToolSchema.shape.inputSchema;
 type ToolInput = z.infer<typeof ToolInputSchema>;
 
@@ -56,10 +60,16 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
 		{
 			name: "pocket_get_articles",
 			description:
-				"Fetches the latest articles from Pocket API. Returns up to 20 articles by default. " +
+				"Fetches the latest unread articles from Pocket API. Returns up to 20 articles by default. " +
 				"You can specify the number of articles to fetch (1-20) using the count parameter. " +
-				"Returns the title, URL, and excerpt for each article.",
+				"Returns the article ID, title, URL, and excerpt for each article.",
 			inputSchema: zodToJsonSchema(GetPocketArticlesSchema) as ToolInput,
+		},
+		{
+			name: "pocket_mark_as_read",
+			description:
+				"Marks a specific Pocket article as read (archived) using its item ID.",
+			inputSchema: zodToJsonSchema(MarkAsReadSchema) as ToolInput,
 		},
 	];
 
@@ -94,9 +104,45 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 								text: articles
 									.map(
 										(article) =>
-											`Title: ${article.title}\nURL: ${article.url}\nExcerpt: ${article.excerpt}\n`,
+											`ID: ${article.id}\nTitle: ${article.title}\nURL: ${article.url}\nExcerpt: ${article.excerpt}\n`,
 									)
 									.join("\n---\n"),
+							},
+						],
+					};
+				} catch (error) {
+					const errorMessage =
+						error instanceof Error ? error.message : String(error);
+					return {
+						content: [
+							{
+								type: "text",
+								text: `Pocket API Error: ${errorMessage}`,
+							},
+						],
+						isError: true,
+					};
+				}
+			}
+			case "pocket_mark_as_read": {
+				if (!config.pocket) {
+					throw new Error("Pocket API configuration is not available");
+				}
+
+				const parsed = MarkAsReadSchema.safeParse(args);
+				if (!parsed.success) {
+					throw new Error(
+						`Invalid arguments for pocket_mark_as_read: ${parsed.error}`,
+					);
+				}
+
+				try {
+					await markAsRead(config.pocket, parsed.data.itemId);
+					return {
+						content: [
+							{
+								type: "text",
+								text: `Successfully marked article ${parsed.data.itemId} as read`,
 							},
 						],
 					};
