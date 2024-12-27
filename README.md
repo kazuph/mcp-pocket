@@ -1,4 +1,5 @@
 # MCP Pocket
+[![smithery badge](https://smithery.ai/badge/@kazuph/mcp-pocket)](https://smithery.ai/server/@kazuph/mcp-pocket)
 
 This is a connector to allow Claude Desktop (or any MCP client) to fetch your saved articles from Pocket API.
 
