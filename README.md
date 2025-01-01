@@ -2,6 +2,8 @@
 
 This is a connector to allow Claude Desktop (or any MCP client) to fetch your saved articles from Pocket API.
 
+<a href="https://glama.ai/mcp/servers/1e2o9ooltu"><img width="380" height="200" src="https://glama.ai/mcp/servers/1e2o9ooltu/badge" alt="@kazuph/mcp-pocket MCP server" /></a>
+
 ## Prerequisites
 - Node.js (install via `brew install node`)
 - Claude Desktop (install from https://claude.ai/desktop)
