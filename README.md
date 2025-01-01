@@ -87,10 +87,11 @@ The following MCP tools will be available in Claude Desktop:
 
 ## Getting Pocket API Credentials
 
-1. Visit [Pocket Developer Portal](https://getpocket.com/developer/)
-2. Create a new app
-3. Obtain your Consumer Key
-4. Follow the [Pocket Authentication API](https://getpocket.com/developer/docs/authentication) process to get your Access Token
+For detailed instructions on obtaining your Pocket API credentials, please refer to [Issue #2](https://github.com/kazuph/mcp-pocket/issues/2).
+
+Quick steps:
+1. Create a new app at [Pocket Developer Portal](https://getpocket.com/developer/apps/new)
+2. Follow the authentication process to get your Consumer Key and Access Token
 
 ## License
 
