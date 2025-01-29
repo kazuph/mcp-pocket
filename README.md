@@ -1,4 +1,5 @@
 # MCP Pocket
+[![smithery badge](https://smithery.ai/badge/@kazuph/mcp-pocket)](https://smithery.ai/server/@kazuph/mcp-pocket)
 
 This is a connector to allow Claude Desktop (or any MCP client) to fetch your saved articles from Pocket API.
 
@@ -10,6 +11,14 @@ This is a connector to allow Claude Desktop (or any MCP client) to fetch your sa
 - Pocket API credentials
 
 ## Quick Start
+
+### Installing via Smithery
+
+To install MCP Pocket for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@kazuph/mcp-pocket):
+
+```bash
+npx -y @smithery/cli install @kazuph/mcp-pocket --client claude
+```
 
 1. Modify your Claude Desktop config located here:
 `~/Library/Application\ Support/Claude/claude_desktop_config.json`
